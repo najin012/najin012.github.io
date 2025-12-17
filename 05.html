@@ -30,17 +30,45 @@
       margin: 2rem auto;
       padding: 0 1.5rem 3rem;
     }
-    section {
+    .accordion {
+      border: 1px solid #d6c7b2;
+      border-radius: 12px;
+      margin-bottom: 1.2rem;
+      overflow: hidden;
       background: #fbf9f6;
-      border-radius: 16px;
-      padding: 2rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
     }
-    section h2 {
-      margin-top: 0;
-      font-size: 1.6rem;
+    .accordion-header {
+      cursor: pointer;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 600;
       color: #6b5a44;
+    }
+    .accordion-header:hover {
+      background: #f1ece4;
+    }
+    .accordion-header span {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .arrow {
+      transition: transform 0.25s ease;
+      display: inline-block;
+    }
+    .accordion.open .arrow {
+      transform: rotate(90deg);
+    }
+    .accordion-content {
+      display: none;
+      padding: 1.5rem;
+      border-top: 1px solid #e6ddcf;
+      line-height: 1.8;
+    }
+    .accordion.open .accordion-content {
+      display: block;
     }
     .tag {
       display: inline-block;
@@ -49,16 +77,7 @@
       padding: 0.3rem 0.7rem;
       border-radius: 999px;
       font-size: 0.85rem;
-      margin-bottom: 1rem;
-    }
-    ul {
-      padding-left: 1.2rem;
-    }
-    footer {
-      text-align: center;
-      padding: 2rem 1rem;
-      font-size: 0.9rem;
-      color: #666;
+      margin-right: 0.5rem;
     }
     .note {
       background: #efe8dc;
@@ -77,48 +96,8 @@
   </header>
 
   <main>
-    <style>
-      .accordion {
-        border: 1px solid #d6c7b2;
-        border-radius: 12px;
-        margin-bottom: 1.2rem;
-        overflow: hidden;
-        background: #fbf9f6;
-      }
-      .accordion-header {
-        cursor: pointer;
-        padding: 1rem 1.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        font-weight: 600;
-        color: #6b5a44;
-      }
-      .accordion-header:hover {
-        background: #f1ece4;
-      }
-      .accordion-header span {
-        display: flex;
-        align-items: center;
-        gap: 0.6rem;
-      }
-      .arrow {
-        transition: transform 0.25s ease;
-      }
-      .accordion.open .arrow {
-        transform: rotate(90deg);
-      }
-      .accordion-content {
-        display: none;
-        padding: 1.5rem;
-        border-top: 1px solid #e6ddcf;
-        line-height: 1.8;
-      }
-      .accordion.open .accordion-content {
-        display: block;
-      }
-    </style>
 
+    <!-- Accordion Items -->
     <div class="accordion">
       <div class="accordion-header">
         <span><span class="tag">焦慮 Anxiety</span>焦慮症｜長期處於高度警戒的狀態</span>
@@ -151,6 +130,7 @@
       </div>
     </div>
 
+    <!-- 複製其他四個分項，保持相同結構 -->
     <div class="accordion">
       <div class="accordion-header">
         <span><span class="tag">憂鬱 Depression</span>憂鬱症｜情緒與動力長期低落</span>
@@ -282,10 +262,22 @@
     <div class="note">
       本頁內容僅為基礎介紹，不能取代專業診斷。若你或身邊的人感到長期困擾，尋求心理師或精神科醫師的協助是重要的一步。
     </div>
+
   </main>
 
   <footer>
     © 2025 心理健康資訊示範頁｜你並不孤單
   </footer>
+
+  <script>
+    const headers = document.querySelectorAll('.accordion-header');
+    headers.forEach(header => {
+      header.addEventListener('click', () => {
+        const accordion = header.parentElement;
+        accordion.classList.toggle('open');
+      });
+    });
+  </script>
 </body>
 </html>
+
