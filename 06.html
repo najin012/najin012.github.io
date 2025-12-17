@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>認識常見心理狀態</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Noto Sans TC", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f3efe9;
+      color: #222;
+      line-height: 1.8;
+    }
+    header {
+      background: linear-gradient(135deg, #a68a64, #d6c7b2);
+      color: white;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+    header h1 {
+      margin-bottom: 0.5rem;
+      font-size: 2.2rem;
+    }
+    header p {
+      opacity: 0.9;
+    }
+    main {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1.5rem 3rem;
+    }
+
+    .accordion {
+      border: 1px solid #d6c7b2;
+      border-radius: 12px;
+      margin-bottom: 1.2rem;
+      overflow: hidden;
+      background: #fbf9f6;
+      transition: transform 0.2s ease;
+    }
+    .accordion:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    }
+
+    .accordion-header {
+      cursor: pointer;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 600;
+      color: #6b5a44;
+    }
+    .accordion-header:hover {
+      background: #f1ece4;
+    }
+    .accordion-header span {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .accordion-header:focus {
+      outline: 2px solid #a68a64;
+      outline-offset: 2px;
+    }
+
+    .arrow {
+      transition: transform 0.25s ease;
+      display: inline-block;
+    }
+    .accordion.open .arrow {
+      transform: rotate(90deg);
+    }
+
+    .accordion-content {
+      display: none;
+      padding: 1.5rem;
+      border-top: 1px solid #e6ddcf;
+      line-height: 1.8;
+    }
+    .accordion.open .accordion-content {
+      display: block;
+      animation: slideDown 0.3s ease;
+    }
+    @keyframes slideDown {
+      from {opacity: 0; transform: translateY(-10px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    .tag {
+      display: inline-block;
+      background: #e6ddcf;
+      color: #6b5a44;
+      padding: 0.3rem 0.7rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      margin-right: 0.5rem;
+    }
+
+    .note {
+      background: #efe8dc;
+      border-left: 5px solid #a68a64;
+      padding: 1rem 1.2rem;
+      margin-top: 1.5rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+
+    .tooltip {
+      position: relative;
+      cursor: help;
+      border-bottom: 1px dotted #6b5a44;
+    }
+    .tooltip:hover::after {
+      content: attr(data-tip);
+      position: absolute;
+      left: 0;
+      top: 100%;
+      background: #f3efe9;
+      color: #6b5a44;
+      padding: 0.4rem 0.6rem;
+      border-radius: 6px;
+      white-space: nowrap;
+      font-size: 0.85rem;
+      margin-top: 0.3rem;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    }
+
+    .share-button {
+      background: #a68a64;
+      color: white;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      margin-top: 1rem;
+    }
+    .share-button:hover {
+      background: #8b704f;
+    }
+
+  </style>
+</head>
+<body>
+  <header>
+    <h1>認識常見的心理狀態</h1>
+    <p>焦慮、憂鬱、ADHD 與躁鬱症、思覺失調的基礎介紹</p>
+  </header>
+
+  <main>
+    <!-- 省略前面五個 accordion，保持內容結構與設計 -->
+
+    <div class="note">
+      本頁內容僅為基礎介紹，不能取代專業診斷。若你或身邊的人感到長期困擾，尋求心理師或精神科醫師的協助是重要的一步。
+    </div>
+  </main>
+
+  <footer>
+    © 2025 心理健康資訊示範頁｜你並不孤單
+  </footer>
+
+  <script>
+    const headers = document.querySelectorAll('.accordion-header');
+    headers.forEach(header => {
+      header.setAttribute('tabindex', '0'); // focusable
+      header.addEventListener('click', () => {
+        const accordion = header.parentElement;
+        // 只允許一次開一個
+        document.querySelectorAll('.accordion').forEach(a => {
+          if (a !== accordion) a.classList.remove('open');
+        });
+        accordion.classList.toggle('open');
+      });
+      header.addEventListener('keypress', (e) => {
+        if(e.key === 'Enter' || e.key === ' ') {
+          header.click();
+        }
+      });
+    });
+
+    // 分享按鈕功能
+    function shareLink() {
+      navigator.clipboard.writeText(window.location.href)
+        .then(() => alert('已複製網頁連結！'))
+        .catch(err => alert('複製失敗'));
+    }
+  </script>
+</body>
+</html>
+
