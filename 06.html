@@ -30,20 +30,13 @@
       margin: 2rem auto;
       padding: 0 1.5rem 3rem;
     }
-
     .accordion {
       border: 1px solid #d6c7b2;
       border-radius: 12px;
       margin-bottom: 1.2rem;
       overflow: hidden;
       background: #fbf9f6;
-      transition: transform 0.2s ease;
     }
-    .accordion:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
-    }
-
     .accordion-header {
       cursor: pointer;
       padding: 1rem 1.5rem;
@@ -52,6 +45,7 @@
       justify-content: space-between;
       font-weight: 600;
       color: #6b5a44;
+      position: relative;
     }
     .accordion-header:hover {
       background: #f1ece4;
@@ -61,11 +55,6 @@
       align-items: center;
       gap: 0.6rem;
     }
-    .accordion-header:focus {
-      outline: 2px solid #a68a64;
-      outline-offset: 2px;
-    }
-
     .arrow {
       transition: transform 0.25s ease;
       display: inline-block;
@@ -73,22 +62,16 @@
     .accordion.open .arrow {
       transform: rotate(90deg);
     }
-
     .accordion-content {
       display: none;
       padding: 1.5rem;
       border-top: 1px solid #e6ddcf;
       line-height: 1.8;
+      position: relative;
     }
     .accordion.open .accordion-content {
       display: block;
-      animation: slideDown 0.3s ease;
     }
-    @keyframes slideDown {
-      from {opacity: 0; transform: translateY(-10px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
-
     .tag {
       display: inline-block;
       background: #e6ddcf;
@@ -98,7 +81,6 @@
       font-size: 0.85rem;
       margin-right: 0.5rem;
     }
-
     .note {
       background: #efe8dc;
       border-left: 5px solid #a68a64;
@@ -107,39 +89,48 @@
       border-radius: 8px;
       font-size: 0.95rem;
     }
-
+    /* Tooltip */
     .tooltip {
       position: relative;
       cursor: help;
-      border-bottom: 1px dotted #6b5a44;
+      border-bottom: 1px dashed #6b5a44;
     }
-    .tooltip:hover::after {
+    .tooltip::after {
       content: attr(data-tip);
       position: absolute;
-      left: 0;
-      top: 100%;
-      background: #f3efe9;
-      color: #6b5a44;
-      padding: 0.4rem 0.6rem;
-      border-radius: 6px;
+      opacity: 0;
+      background: #6b5a44;
+      color: #fff;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
       white-space: nowrap;
-      font-size: 0.85rem;
-      margin-top: 0.3rem;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+      top: 100%;
+      left: 0;
+      transform: translateY(5px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      pointer-events: none;
+      z-index: 10;
     }
-
-    .share-button {
-      background: #a68a64;
-      color: white;
-      border: none;
-      padding: 0.4rem 0.8rem;
+    .tooltip:hover::after,
+    .tooltip:focus::after {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* Share button */
+    .share-btn {
+      display: inline-block;
+      background: #6b5a44;
+      color: #fff;
+      padding: 0.3rem 0.8rem;
+      font-size: 0.8rem;
       border-radius: 6px;
       cursor: pointer;
-      font-size: 0.85rem;
       margin-top: 1rem;
+      text-decoration: none;
     }
-    .share-button:hover {
-      background: #8b704f;
+    .share-btn:hover {
+      background: #8c735b;
     }
   </style>
 </head>
@@ -151,14 +142,14 @@
 
   <main>
 
-    <!-- 五個 Accordion 分項 -->
+    <!-- Accordion Items -->
     <div class="accordion">
-      <div class="accordion-header" tabindex="0">
+      <div class="accordion-header">
         <span><span class="tag">焦慮 Anxiety</span>焦慮症｜長期處於高度警戒的狀態</span>
         <span class="arrow">▶</span>
       </div>
       <div class="accordion-content">
-        <p><strong>介紹：</strong></p>
+        <p><strong>介紹：</strong> <span class="tooltip" data-tip="這裡簡述焦慮症的定義">更多資訊</span></p>
         <ul>
           <li>焦慮症是一種過度且持續的擔憂反應。</li>
           <li>常與對未來的不確定感有關。</li>
@@ -178,15 +169,16 @@
         </ul>
         <p><strong>常見迷思：</strong></p>
         <ul>
-          <li><span class="tooltip" data-tip="社會常認為只是太多想法或不堅強">只是想太多</span></li>
-          <li><span class="tooltip" data-tip="並非因為個人意志力不足">不夠堅強</span></li>
+          <li>只是想太多</li>
+          <li>不夠堅強</li>
         </ul>
-        <button class="share-button" onclick="shareLink()">複製網頁連結</button>
+        <button class="share-btn" onclick="copyLink()">複製連結</button>
       </div>
     </div>
 
+    <!-- 複製其他四個分項，保持相同結構 -->
     <div class="accordion">
-      <div class="accordion-header" tabindex="0">
+      <div class="accordion-header">
         <span><span class="tag">憂鬱 Depression</span>憂鬱症｜情緒與動力長期低落</span>
         <span class="arrow">▶</span>
       </div>
@@ -214,12 +206,12 @@
           <li>不夠努力</li>
           <li>想太多</li>
         </ul>
-        <button class="share-button" onclick="shareLink()">複製網頁連結</button>
+        <button class="share-btn" onclick="copyLink()">複製連結</button>
       </div>
     </div>
 
     <div class="accordion">
-      <div class="accordion-header" tabindex="0">
+      <div class="accordion-header">
         <span><span class="tag">ADHD</span>ADHD｜注意力與執行功能的差異</span>
         <span class="arrow">▶</span>
       </div>
@@ -247,12 +239,12 @@
           <li>只是懶</li>
           <li>長大就會好</li>
         </ul>
-        <button class="share-button" onclick="shareLink()">複製網頁連結</button>
+        <button class="share-btn" onclick="copyLink()">複製連結</button>
       </div>
     </div>
 
     <div class="accordion">
-      <div class="accordion-header" tabindex="0">
+      <div class="accordion-header">
         <span><span class="tag">Bipolar</span>躁鬱症｜情緒在高峰與低谷擺盪</span>
         <span class="arrow">▶</span>
       </div>
@@ -280,12 +272,12 @@
           <li>情緒化的人</li>
           <li>只是愛作怪</li>
         </ul>
-        <button class="share-button" onclick="shareLink()">複製網頁連結</button>
+        <button class="share-btn" onclick="copyLink()">複製連結</button>
       </div>
     </div>
 
     <div class="accordion">
-      <div class="accordion-header" tabindex="0">
+      <div class="accordion-header">
         <span><span class="tag">Schizophrenia</span>思覺失調症｜對現實感知出現落差</span>
         <span class="arrow">▶</span>
       </div>
@@ -313,7 +305,7 @@
           <li>很危險</li>
           <li>無法生活</li>
         </ul>
-        <button class="share-button" onclick="shareLink()">複製網頁連結</button>
+        <button class="share-btn" onclick="copyLink()">複製連結</button>
       </div>
     </div>
 
@@ -332,20 +324,13 @@
     headers.forEach(header => {
       header.addEventListener('click', () => {
         const accordion = header.parentElement;
-        document.querySelectorAll('.accordion').forEach(a => {
-          if(a !== accordion) a.classList.remove('open');
-        });
         accordion.classList.toggle('open');
-      });
-      header.addEventListener('keypress', (e) => {
-        if(e.key === 'Enter' || e.key === ' ') header.click();
       });
     });
 
-    function shareLink() {
-      navigator.clipboard.writeText(window.location.href)
-        .then(() => alert('已複製網頁連結！'))
-        .catch(() => alert('複製失敗'));
+    function copyLink() {
+      navigator.clipboard.writeText(window.location.href);
+      alert("已複製連結！");
     }
   </script>
 </body>
