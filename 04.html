@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>認識常見心理狀態</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Noto Sans TC", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f3efe9;
+      color: #222;
+      line-height: 1.8;
+    }
+    header {
+      background: linear-gradient(135deg, #a68a64, #d6c7b2);
+      color: white;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+    header h1 {
+      margin-bottom: 0.5rem;
+      font-size: 2.2rem;
+    }
+    header p {
+      opacity: 0.9;
+    }
+    main {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1.5rem 3rem;
+    }
+    section {
+      background: #fbf9f6;
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    }
+    section h2 {
+      margin-top: 0;
+      font-size: 1.6rem;
+      color: #6b5a44;
+    }
+    .tag {
+      display: inline-block;
+      background: #e6ddcf;
+      color: #6b5a44;
+      padding: 0.3rem 0.7rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+    }
+    ul {
+      padding-left: 1.2rem;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    .note {
+      background: #efe8dc;
+      border-left: 5px solid #a68a64;
+      padding: 1rem 1.2rem;
+      margin-top: 1.5rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>認識常見的心理狀態</h1>
+    <p>焦慮、憂鬱、ADHD 與躁鬱症、思覺失調的基礎介紹</p>
+  </header>
+
+  <main>
+    <style>
+      .accordion {
+        border: 1px solid #d6c7b2;
+        border-radius: 12px;
+        margin-bottom: 1.2rem;
+        overflow: hidden;
+        background: #fbf9f6;
+      }
+      .accordion-header {
+        cursor: pointer;
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-weight: 600;
+        color: #6b5a44;
+      }
+      .accordion-header:hover {
+        background: #f1ece4;
+      }
+      .accordion-header span {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+      }
+      .arrow {
+        transition: transform 0.25s ease;
+      }
+      .accordion.open .arrow {
+        transform: rotate(90deg);
+      }
+      .accordion-content {
+        display: none;
+        padding: 1.5rem;
+        border-top: 1px solid #e6ddcf;
+        line-height: 1.8;
+      }
+      .accordion.open .accordion-content {
+        display: block;
+      }
+    </style>
+
+    <div class="accordion">
+      <div class="accordion-header">
+        <span><span class="tag">焦慮 Anxiety</span>焦慮症</span>
+        <span class="arrow">▶</span>
+      </div>
+      <div class="accordion-content">
+        <p>焦慮症是一種對未來不確定性或潛在威脅產生過度擔憂與緊張的心理狀態。</p>
+        <ul>
+          <li>過度擔心、心悸、呼吸急促、失眠</li>
+          <li>長期處於高度警戒狀態</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="accordion">
+      <div class="accordion-header">
+        <span><span class="tag">憂鬱 Depression</span>憂鬱症</span>
+        <span class="arrow">▶</span>
+      </div>
+      <div class="accordion-content">
+        <p>憂鬱症是一種長期影響情緒、思考與行動能力的心理疾病。</p>
+        <ul>
+          <li>持續情緒低落、失去興趣</li>
+          <li>疲倦、專注力下降</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="accordion">
+      <div class="accordion-header">
+        <span><span class="tag">ADHD</span>注意力不足過動症</span>
+        <span class="arrow">▶</span>
+      </div>
+      <div class="accordion-content">
+        <p>ADHD 是一種影響注意力調節與執行功能的神經發展狀態。</p>
+        <ul>
+          <li>容易分心、拖延、健忘</li>
+          <li>也可能具有高度創造力</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="accordion">
+      <div class="accordion-header">
+        <span><span class="tag">Bipolar</span>躁鬱症</span>
+        <span class="arrow">▶</span>
+      </div>
+      <div class="accordion-content">
+        <p>躁鬱症是情緒在躁期與鬱期之間明顯擺盪的心理疾病。</p>
+        <ul>
+          <li>躁期：精力旺盛、衝動</li>
+          <li>鬱期：低落、無力</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="accordion">
+      <div class="accordion-header">
+        <span><span class="tag">Schizophrenia</span>思覺失調症</span>
+        <span class="arrow">▶</span>
+      </div>
+      <div class="accordion-content">
+        <p>思覺失調症影響思考、知覺與現實判斷能力。</p>
+        <ul>
+          <li>幻覺、妄想</li>
+          <li>動機與情感表達下降</li>
+        </ul>
+      </div>
+    </div>
+
+    <script>
+      document.querySelectorAll('.accordion-header').forEach(header => {
+        header.addEventListener('click', () => {
+          header.parentElement.classList.toggle('open');
+        });
+      });
+    </script>
+
+    <div class="note">
+      本頁內容僅為基礎介紹，不能取代專業診斷。若你或身邊的人感到長期困擾，尋求心理師或精神科醫師的協助是重要的一步。
+    </div>
+  </main>
+
+  <footer>
+    © 2025 心理健康資訊示範頁｜你並不孤單
+  </footer>
+</body>
+</html>
