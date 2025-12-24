@@ -4,109 +4,271 @@
   <meta charset="UTF-8" />
   <title>技能樹不是用來點滿的</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    /* ---------- 基本設定 ---------- */
+    * {
+      box-sizing: border-box;
+      font-family: "Noto Sans TC", system-ui, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: #0f0f12;
+      color: #eaeaea;
+      overflow: hidden;
+    }
+
+    h1, h2, h3 {
+      font-weight: 500;
+      margin: 0 0 12px;
+    }
+
+    button {
+      background: none;
+      border: 1px solid #555;
+      color: #eaeaea;
+      padding: 10px 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover:not(.disabled) {
+      background: #eaeaea;
+      color: #0f0f12;
+    }
+
+    button.disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    section, main, aside {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    /* ---------- intro ---------- */
+    #intro {
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .subtitle {
+      opacity: 0.7;
+    }
+
+    /* ---------- skill tree ---------- */
+    #skill-tree {
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .tree-container {
+      display: flex;
+      gap: 40px;
+    }
+
+    .branch {
+      border: 1px solid #333;
+      padding: 20px;
+      width: 180px;
+    }
+
+    .branch h2 {
+      font-size: 16px;
+      opacity: 0.7;
+      margin-bottom: 16px;
+    }
+
+    .skill-node {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    #skill-points {
+      opacity: 0.7;
+      font-size: 14px;
+    }
+
+    /* ---------- skill panel ---------- */
+    #skill-panel {
+      position: fixed;
+      right: 0;
+      top: 0;
+      width: 320px;
+      background: #141418;
+      border-left: 1px solid #333;
+      padding: 24px;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      gap: 16px;
+    }
+
+    /* ---------- ending ---------- */
+    #ending {
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .ending-text {
+      font-size: 28px;
+      line-height: 1.4;
+    }
+
+    .ending-subtext {
+      opacity: 0.6;
+    }
+  </style>
 </head>
 
 <body>
 
-  <!-- ① 首頁引導 -->
-  <section id="intro">
-    <h1>技能樹不是用來點滿的</h1>
-    <p class="subtitle">
-      有些選擇，本來就不能共存
-    </p>
-    <button id="start-btn">開始分配技能</button>
-  </section>
+<!-- ① Intro -->
+<section id="intro">
+  <h1>技能樹不是用來點滿的</h1>
+  <p class="subtitle">有些選擇，本來就不能共存</p>
+  <button id="start-btn">開始分配技能</button>
+</section>
 
+<!-- ② Skill Tree -->
+<main id="skill-tree" hidden>
+  <div class="tree-container">
 
-  <!-- ② 技能樹主畫面 -->
-  <main id="skill-tree" hidden>
-
-    <!-- 技能樹容器 -->
-    <section class="tree-container">
-
-      <!-- 分支一：表現 / 成就 -->
-      <div class="branch" data-branch="achievement">
-        <h2>表現 / 成就</h2>
-
-        <button class="skill-node" data-skill="grades">
-          成績
-        </button>
-
-        <button class="skill-node" data-skill="admission">
-          升學
-        </button>
-
-        <button class="skill-node" data-skill="recognition">
-          被肯定
-        </button>
-      </div>
-
-      <!-- 分支二：熱愛 / 自我 -->
-      <div class="branch" data-branch="passion">
-        <h2>熱愛 / 自我</h2>
-
-        <button class="skill-node" data-skill="creation">
-          創作
-        </button>
-
-        <button class="skill-node" data-skill="stage">
-          舞台
-        </button>
-
-        <button class="skill-node" data-skill="freedom">
-          自由
-        </button>
-      </div>
-
-      <!-- 分支三：生存 / 代價 -->
-      <div class="branch" data-branch="cost">
-        <h2>生存 / 代價</h2>
-
-        <button class="skill-node" data-skill="sleep">
-          睡眠
-        </button>
-
-        <button class="skill-node" data-skill="emotion">
-          情緒
-        </button>
-
-        <button class="skill-node" data-skill="relationships">
-          關係
-        </button>
-      </div>
-
-    </section>
-
-    <!-- 技能點數顯示 -->
-    <div id="skill-points">
-      剩餘技能點：<span id="points">3</span>
+    <div class="branch">
+      <h2>表現 / 成就</h2>
+      <button class="skill-node" data-skill="grades">成績</button>
+      <button class="skill-node" data-skill="admission">升學</button>
+      <button class="skill-node" data-skill="recognition">被肯定</button>
     </div>
 
-  </main>
+    <div class="branch">
+      <h2>熱愛 / 自我</h2>
+      <button class="skill-node" data-skill="creation">創作</button>
+      <button class="skill-node" data-skill="stage">舞台</button>
+      <button class="skill-node" data-skill="freedom">自由</button>
+    </div>
 
+    <div class="branch">
+      <h2>生存 / 代價</h2>
+      <button class="skill-node" data-skill="sleep">睡眠</button>
+      <button class="skill-node" data-skill="emotion">情緒</button>
+      <button class="skill-node" data-skill="relationships">關係</button>
+    </div>
 
-  <!-- ③ 技能敘事面板（點技能後出現） -->
-  <aside id="skill-panel" hidden>
-    <h3 id="skill-title">技能名稱</h3>
-    <p id="skill-description">
-      技能的敘事文字會顯示在這裡。
-    </p>
-    <button id="close-panel">關閉</button>
-  </aside>
+  </div>
 
+  <div id="skill-points">
+    剩餘技能點：<span id="points">3</span>
+  </div>
+</main>
 
-  <!-- ④ 結算畫面 -->
-  <section id="ending" hidden>
-    <p class="ending-text">
-      這不是選錯<br>
-      是你被迫選擇
-    </p>
+<!-- ③ Skill Panel -->
+<aside id="skill-panel" hidden>
+  <h3 id="skill-title"></h3>
+  <p id="skill-description"></p>
+  <button id="close-panel">關閉</button>
+</aside>
 
-    <p class="ending-subtext">
-      如果這是一款遊戲<br>
-      那它一開始就不是公平模式
-    </p>
-  </section>
+<!-- ④ Ending -->
+<section id="ending" hidden>
+  <p class="ending-text">
+    這不是選錯<br>
+    是你被迫選擇
+  </p>
+  <p class="ending-subtext">
+    如果這是一款遊戲<br>
+    那它一開始就不是公平模式
+  </p>
+</section>
+
+<script>
+  /* ---------- 狀態 ---------- */
+  let points = 3;
+  const chosen = new Set();
+
+  const skillText = {
+    grades: "成績讓我看起來很安全，但它從來沒有問過我想不想成為這樣的人。",
+    admission: "升學是一條被畫好的路，只要你不偏離。",
+    recognition: "被肯定的時候，我暫時忘記自己是誰。",
+    creation: "創作是我少數不需要被允許的存在方式。",
+    stage: "舞台是我呼吸最順暢的地方。",
+    freedom: "自由不是任性，是不必一直解釋。",
+    sleep: "睡眠被拿去交換未來。",
+    emotion: "情緒要被藏好，才算成熟。",
+    relationships: "關係在忙碌中慢慢鬆脫。"
+  };
+
+  const conflicts = {
+    grades: ["stage"],
+    creation: ["sleep"],
+    admission: ["freedom"]
+  };
+
+  /* ---------- DOM ---------- */
+  const intro = document.getElementById("intro");
+  const tree = document.getElementById("skill-tree");
+  const panel = document.getElementById("skill-panel");
+  const ending = document.getElementById("ending");
+  const pointsEl = document.getElementById("points");
+
+  document.getElementById("start-btn").onclick = () => {
+    intro.hidden = true;
+    tree.hidden = false;
+  };
+
+  document.querySelectorAll(".skill-node").forEach(btn => {
+    btn.onclick = () => {
+      const skill = btn.dataset.skill;
+      if (btn.classList.contains("disabled") || chosen.has(skill)) return;
+
+      chosen.add(skill);
+      points--;
+      pointsEl.textContent = points;
+
+      showPanel(skill);
+      applyConflicts(skill);
+
+      if (points === 0) endGame();
+    };
+  });
+
+  document.getElementById("close-panel").onclick = () => {
+    panel.hidden = true;
+  };
+
+  function showPanel(skill) {
+    panel.hidden = false;
+    document.getElementById("skill-title").textContent = skill;
+    document.getElementById("skill-description").textContent = skillText[skill];
+  }
+
+  function applyConflicts(skill) {
+    if (!conflicts[skill]) return;
+    conflicts[skill].forEach(blocked => {
+      const btn = document.querySelector(`[data-skill="${blocked}"]`);
+      if (btn) btn.classList.add("disabled");
+    });
+  }
+
+  function endGame() {
+    setTimeout(() => {
+      tree.hidden = true;
+      panel.hidden = true;
+      ending.hidden = false;
+    }, 800);
+  }
+</script>
 
 </body>
 </html>
+
