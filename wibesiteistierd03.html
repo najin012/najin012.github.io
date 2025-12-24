@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>如果網站也會累</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    :root {
+      --fatigue: 0;
+    }
+
+    body {
+      margin: 0;
+      height: 200vh;
+      font-family: "Noto Sans TC", system-ui, sans-serif;
+      background: linear-gradient(160deg, #111, #222);
+      color: #eee;
+      transition: filter 0.3s, background 0.3s;
+      overflow-x: hidden;
+    }
+
+    body.tired {
+      filter: blur(1.5px) grayscale(50%);
+      background: linear-gradient(160deg, #080808, #111);
+    }
+
+    .container {
+      padding: 3rem;
+      max-width: 700px;
+      margin: auto;
+      transform: rotate(calc(var(--fatigue) * 0.02deg));
+      transition: transform 0.3s;
+      text-shadow: 0 0 5px rgba(255,255,255,0.2);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      letter-spacing: calc(var(--fatigue) * 0.05px);
+    }
+
+    p {
+      line-height: 1.8;
+      opacity: calc(1 - var(--fatigue) * 0.004);
+      transition: opacity 0.3s;
+    }
+
+    button {
+      margin: 0.5rem 0.5rem 0.5rem 0;
+      padding: 0.8rem 1.5rem;
+      background: #eee;
+      color: #111;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: opacity 0.3s, transform 0.3s, background 0.3s;
+      box-shadow: 0 4px 12px rgba(255,255,255,0.2);
+    }
+
+    button:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .fatigue-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 6px;
+      width: 100%;
+      background: rgba(255,255,255,0.1);
+    }
+
+    .fatigue-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #aaa, #ff6b6b);
+      transition: width 0.2s;
+    }
+
+    .message {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      font-size: 0.9rem;
+      opacity: 0.6;
+    }
+
+    .final {
+      text-align: center;
+      font-size: 1.4rem;
+      margin-top: 5rem;
+      opacity: 0;
+      transition: opacity 1s;
+    }
+
+    .final.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="fatigue-bar">
+    <div class="fatigue-fill" id="fatigueFill"></div>
+  </div>
+
+  <div class="container" id="container">
+    <h1>如果網站也會累</h1>
+    <p>
+      你一直在滑，我一直在回應。  
+      你以為我沒有感覺。
+    </p>
+
+    <p>
+      但每一次滾動、每一次點擊，  
+      都會留下痕跡。
+    </p>
+
+    <!-- 新增多個按鈕 -->
+    <div>
+      <button id="btnWatch">再看一點</button>
+      <button id="btnSlide">滑滑看</button>
+      <button id="btnRandom">亂點吧</button>
+      <button id="btnSneak">偷偷滑</button>
+    </div>
+
+    <div class="final" id="finalText">
+      你看夠了，<br />我也是。
+    </div>
+  </div>
+
+  <div class="message" id="message">疲勞值：0%</div>
+
+  <script>
+    let fatigue = 0;
+    const maxFatigue = 100;
+
+    const fill = document.getElementById("fatigueFill");
+    const msg = document.getElementById("message");
+    const finalText = document.getElementById("finalText");
+    const container = document.getElementById("container");
+
+    const btnWatch = document.getElementById("btnWatch");
+    const btnSlide = document.getElementById("btnSlide");
+    const btnRandom = document.getElementById("btnRandom");
+    const btnSneak = document.getElementById("btnSneak");
+
+    // 檢查 localStorage
+    const lastFatigue = localStorage.getItem("lastFatigue");
+    if (lastFatigue) {
+      const warning = document.createElement("p");
+      warning.style.color = "#ff6b6b";
+      warning.style.fontWeight = "bold";
+      warning.textContent = "你上次也是把我用到這樣 😵‍💫";
+      container.insertBefore(warning, container.firstChild);
+    }
+
+    function increaseFatigue(amount) {
+      if (fatigue >= maxFatigue) return;
+
+      fatigue = Math.min(maxFatigue, fatigue + amount);
+      document.documentElement.style.setProperty("--fatigue", fatigue);
+      fill.style.width = fatigue + "%";
+      msg.textContent = `疲勞值：${Math.floor(fatigue)}%`;
+
+      // 疲勞80%以上按鈕文字變化
+      if (fatigue >= 80 && fatigue < 100) {
+        btnWatch.textContent = "別點了";
+        btnSlide.textContent = "別滑了";
+        btnRandom.textContent = "別亂點了";
+        btnSneak.textContent = "別偷滑了";
+      }
+
+      if (fatigue > 60) {
+        document.body.classList.add("tired");
+      }
+
+      // 滿疲勞
+      if (fatigue >= 100) {
+        [btnWatch, btnSlide, btnRandom, btnSneak].forEach(b => b.disabled = true);
+        finalText.classList.add("show");
+        msg.textContent = "疲勞值：滿了";
+        localStorage.setItem("lastFatigue", fatigue);
+      }
+    }
+
+    // 原本滾動增加疲勞
+    window.addEventListener("scroll", () => {
+      increaseFatigue(0.3);
+    });
+
+    // 按鈕事件
+    btnWatch.addEventListener("click", () => increaseFatigue(5));
+    btnSlide.addEventListener("click", () => increaseFatigue(2));
+    btnRandom.addEventListener("click", () => {
+      increaseFatigue(8);
+      // 隨機搞笑文字
+      const texts = ["哎呀！", "亂點？", "停下來！", "別再點我！"];
+      alert(texts[Math.floor(Math.random() * texts.length)]);
+    });
+    btnSneak.addEventListener("click", () => increaseFatigue(1));
+
+    // 點擊其他地方也增加疲勞
+    document.addEventListener("click", (e) => {
+      if (![btnWatch, btnSlide, btnRandom, btnSneak].includes(e.target)) {
+        increaseFatigue(1);
+      }
+    });
+
+    // 定時文字微抖動（藝術效果）
+    setInterval(() => {
+      const x = (Math.random() - 0.5) * fatigue * 0.02;
+      const y = (Math.random() - 0.5) * fatigue * 0.02;
+      container.style.transform = `rotate(${fatigue * 0.02}deg) translate(${x}px, ${y}px)`;
+    }, 200);
+  </script>
+</body>
+</html>
