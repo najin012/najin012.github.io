@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>技能樹不是用來點滿的</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+* {box-sizing:border-box; font-family:"Noto Sans TC", system-ui, sans-serif;}
+body {margin:0; background:#0f0f12; color:#eaeaea; overflow:hidden;}
+button {background:none; border:1px solid #555; color:#eaeaea; padding:10px 16px; cursor:pointer; transition:0.4s;}
+button:hover:not(.locked):not(.chosen){background:#eaeaea; color:#0f0f12;}
+section, main, aside {width:100vw; height:100vh; display:flex; justify-content:center; align-items:center; text-align:center;}
+[hidden]{display:none !important;}
+#intro{flex-direction:column; gap:20px;}
+#skill-tree{flex-direction:column; gap:24px;}
+.tree-container{display:flex; gap:40px;}
+.branch{border:1px solid #333; padding:20px; width:180px;}
+.branch h2{font-size:16px; opacity:0.7; margin-bottom:16px;}
+.skill-node{width:100%; margin-bottom:10px;}
+.skill-node.chosen{border-color:#eaeaea;}
+.skill-node.locked{animation:collapse 0.8s forwards; pointer-events:none;}
+@keyframes collapse{0%{opacity:1; transform:translateY(0) scale(1);} 100%{opacity:0; transform:translateY(20px) scale(0.7);}}
+#skill-points{opacity:0.7; font-size:14px;}
+#skill-panel{position:fixed; right:0; top:0; width:320px; background:#141418; border-left:1px solid #333; padding:24px; flex-direction:column; align-items:flex-start; text-align:left; gap:16px;}
+#ending{flex-direction:column; gap:24px; padding:40px;}
+.ending-title{font-size:28px;}
+.ending-block{opacity:0.7; line-height:1.8;}
+</style>
+</head>
+<body>
+
+<!-- Intro -->
+<section id="intro">
+<h1>技能樹不是用來點滿的</h1>
+<p>有些選擇，本來就不能共存</p>
+<button id="start-btn">開始分配技能</button>
+</section>
+
+<!-- Skill Tree -->
+<main id="skill-tree" hidden>
+<div class="tree-container">
+
+<div class="branch">
+<h2>表現 / 成就</h2>
+<button class="skill-node" data-skill="成績">成績</button>
+<button class="skill-node" data-skill="升學">升學</button>
+<button class="skill-node" data-skill="被肯定">被肯定</button>
+<button class="skill-node" data-skill="獎學金">獎學金</button>
+</div>
+
+<div class="branch">
+<h2>熱愛 / 自我</h2>
+<button class="skill-node" data-skill="創作">創作</button>
+<button class="skill-node" data-skill="舞台">舞台</button>
+<button class="skill-node" data-skill="自由">自由</button>
+<button class="skill-node" data-skill="旅行">旅行</button>
+</div>
+
+<div class="branch">
+<h2>生存 / 代價</h2>
+<button class="skill-node" data-skill="睡眠">睡眠</button>
+<button class="skill-node" data-skill="情緒">情緒</button>
+<button class="skill-node" data-skill="關係">關係</button>
+<button class="skill-node" data-skill="健康">健康</button>
+</div>
+
+</div>
+<div id="skill-points">
+剩餘技能點：<span id="points">5</span>
+</div>
+</main>
+
+<!-- Skill Panel -->
+<aside id="skill-panel" hidden>
+<h3 id="panel-title"></h3>
+<p id="panel-text"></p>
+<button id="close-panel">關閉</button>
+</aside>
+
+<!-- Ending -->
+<section id="ending" hidden>
+<p class="ending-title">這不是選錯，是你被迫選擇</p>
+<div class="ending-block">
+<strong>你選擇了：</strong>
+<div id="chosen-list"></div>
+</div>
+<div class="ending-block">
+<strong>你失去了：</strong>
+<div id="lost-list"></div>
+</div>
+<div class="ending-block">
+<strong>你額外獲得技能點：</strong>
+<div id="bonus-list"></div>
+</div>
+</section>
+
+<script>
+let points=5;
+const chosen=[], lost=[], bonus=[];
+const textMap={
+"成績":"成績讓我看起來很安全。",
+"升學":"升學是一條畫好的路。",
+"被肯定":"被肯定讓我暫時忘記自己。",
+"獎學金":"獎學金是外界認可的證明。",
+"創作":"創作是我呼吸的方式。",
+"舞台":"舞台是我存在的證明。",
+"自由":"自由不是任性。",
+"旅行":"旅行讓我感到輕盈。",
+"睡眠":"睡眠被拿去交換未來。",
+"情緒":"情緒要被收好。",
+"關係":"關係慢慢鬆脫。",
+"健康":"健康是我能持續做事的基礎。"
+};
+
+// 新增完整衝突規則
+const conflicts={
+"舞台":["成績"],
+"自由":["升學"],
+"睡眠":["成績"],
+"健康":["升學"],
+"創作":["睡眠"],
+"升學":["自由"]
+};
+
+// 額外技能點
+const bonusPoints={"舞台":1,"旅行":1};
+
+const intro=document.getElementById("intro");
+const tree=document.getElementById("skill-tree");
+const panel=document.getElementById("skill-panel");
+const ending=document.getElementById("ending");
+
+document.getElementById("start-btn").onclick=()=>{intro.hidden=true; tree.hidden=false;};
+
+document.querySelectorAll(".skill-node").forEach(btn=>{
+btn.onclick=()=>{
+if(btn.classList.contains("locked")||btn.classList.contains("chosen")) return;
+if(points<=0) return;
+
+const skill=btn.dataset.skill;
+btn.classList.add("chosen");
+chosen.push(skill);
+points--;
+document.getElementById("points").textContent=points;
+
+// 顯示敘事面板
+panel.hidden=false;
+document.getElementById("panel-title").textContent=skill;
+document.getElementById("panel-text").textContent=textMap[skill];
+
+// 處理衝突
+if(conflicts[skill]){
+conflicts[skill].forEach(name=>{
+const conflictBtn=[...document.querySelectorAll(".skill-node")].find(b=>b.dataset.skill===name);
+if(conflictBtn && !conflictBtn.classList.contains("locked")){
+conflictBtn.classList.add("locked");
+lost.push(name);
+}
+});
+}
+
+// 額外技能點
+if(bonusPoints[skill]){
+points+=bonusPoints[skill];
+document.getElementById("points").textContent=points;
+bonus.push(`${skill} +${bonusPoints[skill]} 點`);
+}
+
+if(points<=0) setTimeout(endGame,1000);
+};
+});
+
+document.getElementById("close-panel").onclick=()=>{panel.hidden=true;};
+
+function endGame(){
+tree.hidden=true;
+panel.hidden=true;
+ending.hidden=false;
+document.getElementById("chosen-list").innerHTML=chosen.map(s=>`• ${s}`).join("<br>");
+document.getElementById("lost-list").innerHTML=lost.length? lost.map(s=>`• ${s}`).join("<br>"):"• 無";
+document.getElementById("bonus-list").innerHTML=bonus.length? bonus.map(s=>`• ${s}`).join("<br>"):"• 無";
+}
+</script>
+
+</body>
+</html>
